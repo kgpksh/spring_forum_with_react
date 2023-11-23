@@ -46,14 +46,14 @@ class ResponseDataWrapperTest {
     @Test
     @DisplayName("validation 결과물 성공")
     void afterSuccesValidation() {
-        ResponseDataWrapper<SignupDto> testWrapper = ResponseDataWrapper.validate("testCode", true);
+        ResponseDataWrapper<SignupDto> testWrapper = ResponseDataWrapper.validate("testCode", "testMsg", true);
         assertThat(testWrapper.isSuccess()).isTrue();
     }
 
     @Test
     @DisplayName("validation 결과물 실패")
     void afterFailValidation() {
-        ResponseDataWrapper<SignupDto> testWrapper = ResponseDataWrapper.validate("testCode", false);
+        ResponseDataWrapper<SignupDto> testWrapper = ResponseDataWrapper.validate("testCode", "testMsg", false);
         assertThat(testWrapper.isSuccess()).isFalse();
     }
 }

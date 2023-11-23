@@ -24,19 +24,19 @@ public class ResponseDataWrapper<T> {
         return of(resultCode, msg, null);
     }
 
-    public static <T> ResponseDataWrapper<T> successOf(String resultCode, T data) {
-        return of(SUCCESS_CODE_PREFIX + resultCode, BASIC_SUCCESS_MSG, data);
+    public static <T> ResponseDataWrapper<T> successOf(String resultCode, String resultMsg, T data) {
+        return of(SUCCESS_CODE_PREFIX + resultCode, resultMsg, data);
     }
 
-    public static <T> ResponseDataWrapper<T> failOf(String resultCode, T data) {
-        return of(FAIL_CODE_PREFIX + resultCode, BASIC_FAIL_MSG, data);
+    public static <T> ResponseDataWrapper<T> failOf(String resultCode, String resultMsg, T data) {
+        return of(FAIL_CODE_PREFIX + resultCode, resultMsg, data);
     }
 
-    public static <T> ResponseDataWrapper<T> validate(String resultCode, boolean isAvailable) {
+    public static <T> ResponseDataWrapper<T> validate(String resultCode, String resultMsg, boolean isAvailable) {
         if (isAvailable) {
-            return successOf(resultCode, null);
+            return successOf(resultCode, resultMsg, null);
         }
-        return failOf(resultCode, null);
+        return failOf(resultCode, resultMsg, null);
     }
 
     public boolean isSuccess() {

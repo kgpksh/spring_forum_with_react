@@ -1,12 +1,13 @@
 package learning.practice.spring_forum_with_react.boundedContext.member.controller;
 
 import jakarta.validation.Valid;
+import learning.practice.spring_forum_with_react.base.resData.ResponseDataWrapper;
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.SignupDto;
+import learning.practice.spring_forum_with_react.boundedContext.member.dto.SignupResult;
 import learning.practice.spring_forum_with_react.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/member")
@@ -14,8 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
     private final MemberService memberService;
 
+    @GetMapping("/signup")
+    public String test() {
+        return "react!";
+    }
+
     @PostMapping("/signup")
-    public String signup(@Valid SignupDto signupDto) {
-        return memberService.signUpMember(signupDto).getMsg();
+    public ResponseEntity<SignupResult> signup(@RequestBody @Valid SignupDto signupDto) {
+        ResponseDataWrapper result = memberService.signUpMember(signupDto);
+
+        SignupResult signupResult = new SignupResult();
+        signupResult.setSuccessSignup(result.isSuccess());
+        signupResult.setResultMsg(result.getMsg());
+        return ResponseEntity.ok(signupResult);
     }
 }

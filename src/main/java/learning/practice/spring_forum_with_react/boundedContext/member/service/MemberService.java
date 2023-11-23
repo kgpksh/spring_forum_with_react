@@ -18,8 +18,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public ResponseDataWrapper<SignupDto> signUpMember(SignupDto signupDto) {
-        ResponseDataWrapper<SignupDto> validation = validateSignUp(signupDto);
+    public ResponseDataWrapper signUpMember(SignupDto signupDto) {
+        ResponseDataWrapper validation = validateSignUp(signupDto);
         if (validation.isSuccess()) {
             Member member = new Member();
             member.setAdmin(false);
@@ -32,11 +32,11 @@ public class MemberService {
         return validation;
     }
 
-    private ResponseDataWrapper<SignupDto> validateSignUp(SignupDto signupDto) {
+    private ResponseDataWrapper validateSignUp(SignupDto signupDto) {
         Optional<Member> wrappedMember = memberRepository.findMemberByUsername(signupDto.getUsername());
         if (wrappedMember.isEmpty()) {
-            return ResponseDataWrapper.validate(SIGNUP_FAIL_ALREADY_EXISTS, true);
+            return ResponseDataWrapper.validate("1", SIGNUP_SUCCESS, true);
         }
-        return ResponseDataWrapper.validate(SIGNUP_SUCCESS, false);
+        return ResponseDataWrapper.validate("1", SIGNUP_FAIL_ALREADY_EXISTS, false);
     }
 }

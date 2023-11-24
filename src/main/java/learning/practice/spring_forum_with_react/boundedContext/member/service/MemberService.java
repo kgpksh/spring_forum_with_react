@@ -1,6 +1,7 @@
 package learning.practice.spring_forum_with_react.boundedContext.member.service;
 
 import learning.practice.spring_forum_with_react.base.resData.ResponseDataWrapper;
+import learning.practice.spring_forum_with_react.boundedContext.member.dto.LoginForm;
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.SignupDto;
 import learning.practice.spring_forum_with_react.boundedContext.member.entity.Member;
 import learning.practice.spring_forum_with_react.boundedContext.member.repository.MemberRepository;
@@ -38,5 +39,26 @@ public class MemberService {
             return ResponseDataWrapper.validate("1", SIGNUP_SUCCESS, true);
         }
         return ResponseDataWrapper.validate("1", SIGNUP_FAIL_ALREADY_EXISTS, false);
+    }
+
+    public ResponseDataWrapper<String> login(LoginForm loginForm) {
+        String username = loginForm.getUsername();
+        String password = loginForm.getPassword();
+
+        return validateLogin(username, password);
+    }
+
+    private ResponseDataWrapper<String> validateLogin(String username, String password) {
+        Optional<Member> quriedMember = memberRepository.findMemberByUsername(username);
+        if (quriedMember.isEmpty()) {
+            return ResponseDataWrapper.validate("2", "존재하지 않는 회원 입니다", false);
+        }
+
+        Member member = quriedMember.get();
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            return ResponseDataWrapper.validate("3", "잘못된 비밀번호 입니다.", false);
+        }
+
+        return ResponseDataWrapper.validate("2", "로그인 성공.", true);
     }
 }

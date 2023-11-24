@@ -2,6 +2,7 @@ package learning.practice.spring_forum_with_react.boundedContext.member.controll
 
 import jakarta.validation.Valid;
 import learning.practice.spring_forum_with_react.base.resData.ResponseDataWrapper;
+import learning.practice.spring_forum_with_react.boundedContext.member.dto.LoginForm;
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.SignupDto;
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.SignupResult;
 import learning.practice.spring_forum_with_react.boundedContext.member.service.MemberService;
@@ -14,11 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-
-    @GetMapping("/signup")
-    public String test() {
-        return "react!";
-    }
 
     @PostMapping("/signup")
     public ResponseEntity<SignupResult> signup(@RequestBody @Valid SignupDto signupDto) {

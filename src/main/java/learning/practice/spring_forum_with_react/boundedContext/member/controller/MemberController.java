@@ -3,6 +3,7 @@ package learning.practice.spring_forum_with_react.boundedContext.member.controll
 import jakarta.validation.Valid;
 import learning.practice.spring_forum_with_react.base.resData.ResponseDataWrapper;
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.LoginForm;
+import learning.practice.spring_forum_with_react.boundedContext.member.dto.LoginResult;
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.SignupDto;
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.SignupResult;
 import learning.practice.spring_forum_with_react.boundedContext.member.service.MemberService;
@@ -24,5 +25,17 @@ public class MemberController {
         signupResult.setSuccessSignup(result.isSuccess());
         signupResult.setResultMsg(result.getMsg());
         return ResponseEntity.ok(signupResult);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResult> login(@RequestBody @Valid LoginForm loginForm) {
+        ResponseDataWrapper<String> result = memberService.login(loginForm);
+
+        LoginResult loginResult = new LoginResult();
+        loginResult.setSuccessLogin(result.isSuccess());
+        loginResult.setResultMsg(result.getMsg());
+        loginResult.setToken(result.getData());
+
+        return ResponseEntity.ok(loginResult);
     }
 }

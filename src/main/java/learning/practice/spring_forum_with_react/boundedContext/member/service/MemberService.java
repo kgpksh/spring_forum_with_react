@@ -1,11 +1,13 @@
 package learning.practice.spring_forum_with_react.boundedContext.member.service;
 
 import learning.practice.spring_forum_with_react.base.resData.ResponseDataWrapper;
+import learning.practice.spring_forum_with_react.base.security.jwt.JwtProvider;
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.LoginForm;
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.SignupDto;
 import learning.practice.spring_forum_with_react.boundedContext.member.entity.Member;
 import learning.practice.spring_forum_with_react.boundedContext.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class MemberService {
     private static final String SIGNUP_SUCCESS = "회원 가입 성공";
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    @Value("${custom.jwt.secretKey}")
+    private String secretKey;
 
     public ResponseDataWrapper signUpMember(SignupDto signupDto) {
         ResponseDataWrapper validation = validateSignUp(signupDto);
@@ -45,7 +49,14 @@ public class MemberService {
         String username = loginForm.getUsername();
         String password = loginForm.getPassword();
 
-        return validateLogin(username, password);
+        ResponseDataWrapper validation = validateLogin(username, password);
+        if (validation.isSuccess()) {
+            return ResponseDataWrapper.of(validation.getResultCode(), validation.getMsg(),
+                    JwtProvider.createJwt(username,secretKey));
+        }
+
+        return ResponseDataWrapper.of(validation.getResultCode(), validation.getMsg(),
+                null);
     }
 
     private ResponseDataWrapper<String> validateLogin(String username, String password) {

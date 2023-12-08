@@ -8,7 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
-@Entity
+@MappedSuperclass
 @Data
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {

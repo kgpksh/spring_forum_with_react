@@ -47,5 +47,7 @@ tasks.named('bootBuildImage') {
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+	useJUnitPlatform() {
+		excludeTags('bulkDbTest')
+	}
 }

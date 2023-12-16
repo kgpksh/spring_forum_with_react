@@ -34,7 +34,7 @@ class BulkDataManagerTest {
         for (int i = 1; i < size + 1; i++) {
             Post post = new Post();
             post.setAuthor(author + i % 50);
-            post.setSubject(i % 4);
+            post.setCategory(i % 4);
             post.setTitle(title + i);
             post.setContent(content + i);
             sampleData.add(post);

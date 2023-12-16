@@ -8,7 +8,7 @@ import lombok.Data;
 @Entity
 public class Post extends BaseEntity {
     private String author;
-    private int subject;
+    private int category;
     private String title;
     private String content;
     private long view;

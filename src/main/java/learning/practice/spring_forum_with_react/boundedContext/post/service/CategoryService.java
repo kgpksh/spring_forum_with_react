@@ -28,4 +28,8 @@ public class CategoryService {
     public long selectCategoryId(String category) {
         return categoryIds.get(category);
     }
+
+    public String convertIdToCategory(long id) {
+        return categoryList.get((int)(id - 1)).getCategory();
+    }
 }

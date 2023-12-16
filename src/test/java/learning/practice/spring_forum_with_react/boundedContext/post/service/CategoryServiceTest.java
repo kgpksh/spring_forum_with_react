@@ -28,4 +28,10 @@ class CategoryServiceTest {
         long categoryId = categoryService.selectCategoryId("Cook");
         assertThat(categoryId).isEqualTo(1L);
     }
+
+    @Test
+    void convertIdToCategoryTest() {
+        String category = categoryService.convertIdToCategory(1L);
+        assertThat(category).isEqualTo("Cook");
+    }
 }

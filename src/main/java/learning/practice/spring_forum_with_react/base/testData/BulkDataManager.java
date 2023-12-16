@@ -28,7 +28,7 @@ public class BulkDataManager {
                     batchList,
                     size,
                     (PreparedStatement ps, Post post) -> {
-                        ps.setString(1, post.getSubject());
+                        ps.setInt(1, post.getSubject());
                         ps.setString(2, post.getAuthor());
                         ps.setString(3, post.getTitle());
                         ps.setString(4, post.getContent());

@@ -1,18 +1,18 @@
 package learning.practice.spring_forum_with_react.base.resData;
 
 import learning.practice.spring_forum_with_react.boundedContext.member.dto.SignupDto;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")
 class ResponseDataWrapperTest {
     private TestClass testClass= new TestClass();
     private class TestClass {

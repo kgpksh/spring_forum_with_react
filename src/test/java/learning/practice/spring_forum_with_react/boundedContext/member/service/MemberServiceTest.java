@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
@@ -20,6 +21,8 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
+@ActiveProfiles("test")
 class MemberServiceTest {
     private SignupDto mockSignupDto(String name, String pw) throws Exception {
         SignupDto signupDto = new SignupDto();

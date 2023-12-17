@@ -17,7 +17,7 @@ public class BulkDataManager {
     @Transactional
     public void saveBulk(List<Post> postList, int size) {
         String sql = """
-                INSERT INTO post (created_date, last_modified_date, subject, author, title, content) VALUES (NOW(), NOW(), ?, ?, ?, ?)
+                INSERT INTO post (created_date, last_modified_date, category, author, title, content) VALUES (NOW(), NOW(), ?, ?, ?, ?)
                 """;
 
         int batchSize = 20000;
@@ -28,7 +28,7 @@ public class BulkDataManager {
                     batchList,
                     size,
                     (PreparedStatement ps, Post post) -> {
-                        ps.setInt(1, post.getSubject());
+                        ps.setInt(1, post.getCategory());
                         ps.setString(2, post.getAuthor());
                         ps.setString(3, post.getTitle());
                         ps.setString(4, post.getContent());

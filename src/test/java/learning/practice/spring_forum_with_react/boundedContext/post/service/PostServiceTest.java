@@ -1,11 +1,13 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostReadingList;
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -18,8 +20,8 @@ class PostServiceTest {
 
     @Test
     void readPostListTest() {
-        PostReadingList postReadingList = postService.readPostList("Book", 2401L);
-        assertThat(postReadingList.getPosts().get(0).getTitle()).isEqualTo("title2397");
-        assertThat(postReadingList.getOldestId()).isEqualTo(401L);
+        List<PostList> postReadingList = postService.readPostList("Book", 2401L);
+        assertThat(postReadingList.get(0).getTitle()).isEqualTo("title2397");
+        assertThat(postReadingList.get(postReadingList.size() - 1).getId()).isEqualTo(401L);
     }
 }

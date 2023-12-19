@@ -34,14 +34,16 @@ public class TestData {
     }
 
     @Bean
+    @Transactional
     CommandLineRunner initData(BulkDataManager bulkDataManager) {
         return new CommandLineRunner() {
             @Override
-            @Transactional
             public void run(String... args) throws Exception {
-                int size = 630;
+                bulkDataManager.createCategoryTable();
+
+                int size = 2420;
                 List<Post> sampleData = createData(size);
-                bulkDataManager.saveBulk(sampleData, size);
+                bulkDataManager.createPostTable(sampleData, size);
             }
         };
     }

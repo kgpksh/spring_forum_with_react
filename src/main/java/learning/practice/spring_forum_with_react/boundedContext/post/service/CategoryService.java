@@ -2,34 +2,42 @@ package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Category;
 import learning.practice.spring_forum_with_react.boundedContext.post.repository.CategoryRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
-    private List<Category> categoryList;
-    private CategoryRepository categoryRepository;
-    private Map<String, Long> categoryIds = new HashMap<>();
-
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-        this.categoryList = categoryRepository.findAll();
-        for (Category category : categoryList) {
-            this.categoryIds.put(category.getCategory(), category.getId());
-        }
-    }
+    private final CategoryRepository categoryRepository;
 
     public List<Category> getCategoryList() {
-        return categoryList;
-    }
-    public long selectCategoryId(String category) {
-        return categoryIds.get(category);
+        return categoryRepository.findAll();
     }
 
+    public long selectCategoryId(String categoryName) {
+        return createCategoryIdPairs().get(categoryName);
+    }
+
+    @Transactional(readOnly = true)
+    @Cacheable("categoryId")
+    public Map<String, Long> createCategoryIdPairs() {
+        Map<String, Long> result = new HashMap<>();
+        for (Category category : getCategoryList()) {
+            result.put(category.getCategory(), category.getId());
+        }
+
+        return result;
+    }
+
+    @Transactional(readOnly = true)
     public String convertIdToCategory(long id) {
-        return categoryList.get((int)(id - 1)).getCategory();
+        return getCategoryList().get((int)(id - 1)).getCategory();
     }
 }

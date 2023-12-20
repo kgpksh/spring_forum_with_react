@@ -19,9 +19,16 @@ class PostServiceTest {
     private PostService postService;
 
     @Test
-    void readPostListTest() {
-        List<PostList> postReadingList = postService.readPostList("Book", 2401L);
+    void readPostListByCategoryTest() {
+        List<PostList> postReadingList = postService.readPostListByCategory("Book", 2401L);
         assertThat(postReadingList.get(0).getTitle()).isEqualTo("title2397");
         assertThat(postReadingList.get(postReadingList.size() - 1).getId()).isEqualTo(401L);
+    }
+
+    @Test
+    void readPostListWithoutCategory() {
+        List<PostList> postList = postService.readPostList(2000L);
+        assertThat(postList.get(0).getTitle()).isEqualTo("title1999");
+        assertThat(postList.get(postList.size() - 1).getId()).isEqualTo(1500L);
     }
 }

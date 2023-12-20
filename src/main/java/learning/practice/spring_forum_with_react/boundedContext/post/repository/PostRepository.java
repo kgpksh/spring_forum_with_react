@@ -17,4 +17,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                 FROM post WHERE category = :category and id < :oldestId ORDER BY id DESC LIMIT :selectRange
             """, nativeQuery = true)
     Optional<List<PostList>> findPagesBySubject(@Param("category") long category, @Param("oldestId") long oldestId, @Param("selectRange") int selectRange);
+
+    @Query(value = """
+                    SELECT id, last_modified_date, author, category, title, view
+                    FROM post WHERE id < :oldestId ORDER BY id DESC LIMIT :selectRange
+                """, nativeQuery = true)
+    Optional<List<PostList>> findPages(@Param("oldestId") long oldestId, @Param("selectRange") int selectRange);
 }

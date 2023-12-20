@@ -16,7 +16,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final int SELECT_RANGE = 500;
 
-    public List<PostList> readPostList(String category, long oldestId) {
+    public List<PostList> readPostListByCategory(String category, long oldestId) {
         long categoryId = categoryService.selectCategoryId(category);
         Optional<List<PostList>> selectResult = postRepository.findPagesBySubject(categoryId, oldestId, SELECT_RANGE);
 
@@ -26,5 +26,15 @@ public class PostService {
 
         List<PostList> result = selectResult.get();
         return result;
+    }
+
+    public List<PostList> readPostList(long oldestId) {
+        Optional<List<PostList>> selectResult = postRepository.findPages(oldestId, SELECT_RANGE);
+
+        if (selectResult.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return selectResult.get();
     }
 }

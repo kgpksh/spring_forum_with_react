@@ -30,7 +30,12 @@ public class SecureConfig {
                 authorizeHttpRequests(request -> {
                     request.requestMatchers(
                             new AntPathRequestMatcher("/member/signup")
-                            ,new AntPathRequestMatcher("/member/login")).anonymous();
+                            ,new AntPathRequestMatcher("/member/login"))
+                            .anonymous();
+
+                    request.requestMatchers(
+                            new AntPathRequestMatcher("/post/list")
+                    ).permitAll();
                 }).
                 sessionManagement((sessionManagement) -> {
                     sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

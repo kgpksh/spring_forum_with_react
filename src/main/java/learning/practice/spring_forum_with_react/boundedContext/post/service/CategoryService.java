@@ -3,8 +3,8 @@ package learning.practice.spring_forum_with_react.boundedContext.post.service;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Category;
 import learning.practice.spring_forum_with_react.boundedContext.post.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.QueryParameterException;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +22,11 @@ public class CategoryService {
     }
 
     public long selectCategoryId(String categoryName) {
-        return createCategoryIdPairs().get(categoryName);
+        try {
+            return createCategoryIdPairs().get(categoryName);
+        } catch (Exception exception) {
+            throw new QueryParameterException("존재 하지 않는 카테고리입니다");
+        }
     }
 
     @Transactional(readOnly = true)

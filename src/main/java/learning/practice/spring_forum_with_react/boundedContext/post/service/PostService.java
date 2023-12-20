@@ -17,7 +17,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final int SELECT_RANGE = 500;
 
-    public List<PostList> readPostListByCategory(String category, long oldestId) throws QueryParameterException {
+    public List<PostList> readPostList(String category, long oldestId) throws QueryParameterException {
         try {
             long categoryId = categoryService.selectCategoryId(category);
             Optional<List<PostList>> selectResult = postRepository.findPagesBySubject(categoryId, oldestId, SELECT_RANGE);

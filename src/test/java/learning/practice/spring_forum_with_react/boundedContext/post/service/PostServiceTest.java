@@ -24,14 +24,14 @@ class PostServiceTest {
 
     @Test
     void readPostListByCategoryTest() {
-        List<PostList> postReadingList = postService.readPostListByCategory("Book", 2401L);
+        List<PostList> postReadingList = postService.readPostList("Book", 2401L);
         assertThat(postReadingList.get(0).getTitle()).isEqualTo("title2397");
         assertThat(postReadingList.get(postReadingList.size() - 1).getId()).isEqualTo(401L);
     }
 
     @Test
     void readPostListByCategoryFailTest() {
-        assertThatThrownBy(() -> postService.readPostListByCategory("aba", 2401L))
+        assertThatThrownBy(() -> postService.readPostList("aba", 2401L))
                 .isInstanceOf(QueryParameterException.class);
     }
 

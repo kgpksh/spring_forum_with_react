@@ -1,6 +1,8 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostSaveForm;
+import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
 import learning.practice.spring_forum_with_react.boundedContext.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.QueryParameterException;
@@ -41,5 +43,15 @@ public class PostService {
         }
 
         return selectResult.get();
+    }
+
+    public Post savePost(PostSaveForm postSaveForm) {
+        Post post = new Post();
+        post.setCategory(postSaveForm.getCategory());
+        post.setAuthor(postSaveForm.getAuthor());
+        post.setTitle(postSaveForm.getTitle());
+        post.setContent(postSaveForm.getContent());
+
+        return postRepository.save(post);
     }
 }

@@ -2,6 +2,8 @@ package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
 import learning.practice.spring_forum_with_react.base.initData.TestData;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostSaveForm;
+import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
 import org.hibernate.QueryParameterException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -47,5 +50,34 @@ class PostServiceTest {
         List<PostList> postList = postService.readPostList(2);
         assertThat(postList.get(0).getTitle()).isEqualTo("title1");
         assertThat(postList.size()).isEqualTo(1);
+    }
+
+    private PostSaveForm setPostSaveForm(int category, String author, String title, String content) throws NoSuchFieldException, IllegalAccessException {
+        PostSaveForm postSaveForm = new PostSaveForm();
+        Field authorField = postSaveForm.getClass().getDeclaredField("author");
+        authorField.setAccessible(true);
+        authorField.set(postSaveForm, author);
+
+        Field categoryField = postSaveForm.getClass().getDeclaredField("category");
+        categoryField.setAccessible(true);
+        categoryField.set(postSaveForm, category);
+
+        Field titleField = postSaveForm.getClass().getDeclaredField("title");
+        titleField.setAccessible(true);
+        titleField.set(postSaveForm, title);
+
+        Field contentField = postSaveForm.getClass().getDeclaredField("content");
+        contentField.setAccessible(true);
+        contentField.set(postSaveForm, content);
+
+        return postSaveForm;
+    }
+
+    @Test
+    void savePostTestSuccess() throws Exception{
+       PostSaveForm postSaveForm = setPostSaveForm(1, "newAuthor", "newTitle", "newContent");
+       Post post = postService.savePost(postSaveForm);
+
+       assertThat(post.getAuthor()).isEqualTo("newAuthor");
     }
 }

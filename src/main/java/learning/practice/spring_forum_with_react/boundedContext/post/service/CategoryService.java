@@ -1,7 +1,10 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Category;
 import learning.practice.spring_forum_with_react.boundedContext.post.repository.CategoryRepository;
+import learning.practice.spring_forum_with_react.boundedContext.post.validation.CategoryRequest;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.QueryParameterException;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,7 +17,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService {
+public class CategoryService implements ConstraintValidator<CategoryRequest, Integer > {
     private final CategoryRepository categoryRepository;
 
     public List<Category> getCategoryList() {
@@ -43,5 +46,15 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public String convertIdToCategory(long id) {
         return getCategoryList().get((int)(id - 1)).getCategory();
+    }
+
+    @Override
+    public boolean isValid(Integer value, ConstraintValidatorContext context) {
+        try {
+            getCategoryList().get(value);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

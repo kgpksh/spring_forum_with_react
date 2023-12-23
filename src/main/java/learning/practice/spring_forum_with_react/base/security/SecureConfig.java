@@ -35,6 +35,7 @@ public class SecureConfig {
 
                     request.requestMatchers(
                             new AntPathRequestMatcher("/post/list")
+                            ,new AntPathRequestMatcher("/category/categoryList")
                     ).permitAll();
 
                     request.requestMatchers(

@@ -1,5 +1,6 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
+import learning.practice.spring_forum_with_react.TestUtils;
 import learning.practice.spring_forum_with_react.base.initData.TestData;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostSaveForm;
@@ -52,30 +53,10 @@ class PostServiceTest {
         assertThat(postList.size()).isEqualTo(1);
     }
 
-    private PostSaveForm setPostSaveForm(int category, String author, String title, String content) throws NoSuchFieldException, IllegalAccessException {
-        PostSaveForm postSaveForm = new PostSaveForm();
-        Field authorField = postSaveForm.getClass().getDeclaredField("author");
-        authorField.setAccessible(true);
-        authorField.set(postSaveForm, author);
-
-        Field categoryField = postSaveForm.getClass().getDeclaredField("category");
-        categoryField.setAccessible(true);
-        categoryField.set(postSaveForm, category);
-
-        Field titleField = postSaveForm.getClass().getDeclaredField("title");
-        titleField.setAccessible(true);
-        titleField.set(postSaveForm, title);
-
-        Field contentField = postSaveForm.getClass().getDeclaredField("content");
-        contentField.setAccessible(true);
-        contentField.set(postSaveForm, content);
-
-        return postSaveForm;
-    }
-
     @Test
     void savePostTestSuccess() throws Exception{
-       PostSaveForm postSaveForm = setPostSaveForm(1, "newAuthor", "newTitle", "newContent");
+        PostSaveForm postSaveForm = new PostSaveForm();
+        TestUtils.setFieldValue(postSaveForm, "newAuthor", 1, "newTitle", "newContent");
        Post post = postService.savePost(postSaveForm);
 
        assertThat(post.getAuthor()).isEqualTo("newAuthor");

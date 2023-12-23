@@ -36,6 +36,10 @@ public class SecureConfig {
                     request.requestMatchers(
                             new AntPathRequestMatcher("/post/list")
                     ).permitAll();
+
+                    request.requestMatchers(
+                            new AntPathRequestMatcher("/post/post")
+                    ).authenticated();
                 }).
                 sessionManagement((sessionManagement) -> {
                     sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

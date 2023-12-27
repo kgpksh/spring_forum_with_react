@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<CommentView> findAllByPostId(long postId);
     Optional<Comment> findById(long id);
+
+    void deleteAllByPostId(long id);
 }

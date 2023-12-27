@@ -70,4 +70,17 @@ class CommentServiceTest {
         assertThat(comments.size()).isEqualTo(1);
         assertThat(comments.get(0).getComment()).isEqualTo("테스트 댓글2");
     }
+
+    @Test
+    @Order(5)
+    void deleteAllByPost() throws IllegalAccessException {
+        CommentCreateForm commentCreateForm3 = new CommentCreateForm();
+        CommentCreateForm commentCreateForm4 = new CommentCreateForm();
+        TestUtils.setFieldValue(commentCreateForm3, 1L, "테스트 댓글3", "user1");
+        TestUtils.setFieldValue(commentCreateForm4, 1L, "테스트 댓글4", "user2");
+
+        commentService.deleteWithPost(1L);
+
+        assertThat(commentRepository.findAll().size()).isEqualTo(0);
+    }
 }

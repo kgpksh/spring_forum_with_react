@@ -2,6 +2,7 @@ package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
 import learning.practice.spring_forum_with_react.TestUtils;
 import learning.practice.spring_forum_with_react.base.initData.TestData;
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.CommentCreateForm;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostSaveForm;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
@@ -25,6 +26,8 @@ class PostServiceTest {
     private PostService postService;
     @Autowired
     private TestData testData;
+    @Autowired
+    private CommentService commentService;
 
     @Test
     void readPostListByCategoryTest() {
@@ -60,5 +63,20 @@ class PostServiceTest {
        Post post = postService.savePost(postSaveForm);
 
        assertThat(post.getAuthor()).isEqualTo("newAuthor");
+    }
+
+    @Test
+    void deletePost() throws IllegalAccessException {
+        for(int i = 0; i < 10; i++) {
+            CommentCreateForm commentCreateForm = new CommentCreateForm();
+            TestUtils.setFieldValue(commentCreateForm, 1L, "테스트 댓글", "user1");
+
+            commentService.createComment(commentCreateForm);
+        }
+
+        postService.deletePost(1L);
+
+        assertThat(postService.readPostList(2L).size()).isEqualTo(0);
+        assertThat(commentService.getCommentInPost(1L).size()).isEqualTo(0);
     }
 }

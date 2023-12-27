@@ -21,6 +21,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final int SELECT_RANGE = 500;
 
+    private final CommentService commentService;
+
     public List<PostList> readPostList(String category, long oldestId) throws QueryParameterException {
         try {
             long categoryId = categoryService.selectCategoryId(category);
@@ -63,5 +65,10 @@ public class PostService {
         post.setContent(postSaveForm.getContent());
 
         return postRepository.save(post);
+    }
+
+    public void deletePost(long postId) {
+        postRepository.deleteById(postId);
+        commentService.deleteWithPost(postId);
     }
 }

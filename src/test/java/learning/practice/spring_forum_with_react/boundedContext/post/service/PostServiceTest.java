@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -63,6 +62,19 @@ class PostServiceTest {
        Post post = postService.savePost(postSaveForm);
 
        assertThat(post.getAuthor()).isEqualTo("newAuthor");
+    }
+
+    @Test
+    void getPostContentSuccessTest() {
+        String content = postService.getPostContent(1L);
+
+        assertThat(content).isEqualTo("content1");
+    }
+
+    @Test
+    void getPostContentFailTest() {
+        assertThatThrownBy(() -> postService.getPostContent(0L))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

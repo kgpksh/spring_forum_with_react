@@ -1,5 +1,6 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostContent;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostSaveForm;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
@@ -55,6 +56,15 @@ public class PostService {
         }
 
         return oldestId;
+    }
+
+    public String getPostContent(long postId) {
+        Optional<PostContent> content = postRepository.findContentById(postId);
+        if (content.isEmpty()) {
+            throw new IllegalArgumentException("존재 하지 않는 게시글입니다");
+        }
+
+        return content.get().getContent();
     }
 
     public Post savePost(PostSaveForm postSaveForm) {

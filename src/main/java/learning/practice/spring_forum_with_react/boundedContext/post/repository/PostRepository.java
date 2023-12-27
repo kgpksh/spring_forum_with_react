@@ -1,5 +1,6 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.repository;
 
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostContent;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,4 +24,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                     FROM post WHERE id < :oldestId ORDER BY id DESC LIMIT :selectRange
                 """, nativeQuery = true)
     Optional<List<PostList>> findPages(@Param("oldestId") long oldestId, @Param("selectRange") int selectRange);
+
+    Optional<PostContent> findContentById(long id);
 }

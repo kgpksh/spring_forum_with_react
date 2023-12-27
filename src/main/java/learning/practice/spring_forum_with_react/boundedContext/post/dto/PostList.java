@@ -7,7 +7,7 @@ import java.util.Date;
 @JsonDeserialize(as = PostLIstImpl.class)
 public interface PostList {
     long getId();
-    Date getLastModifiedDate();
+    Date getLast_modified_date();
     String getAuthor();
     int getCategory();
     String getTitle();

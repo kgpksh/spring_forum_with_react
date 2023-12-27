@@ -7,7 +7,7 @@ import java.util.Date;
 @Getter
 public class PostLIstImpl implements PostList {
     private long id;
-    private Date lastModifiedDate;
+    private Date last_modified_date;
     private String author;
     private int category;
     private String title;

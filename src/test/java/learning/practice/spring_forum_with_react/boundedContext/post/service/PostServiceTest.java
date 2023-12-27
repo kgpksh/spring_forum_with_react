@@ -2,10 +2,7 @@ package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
 import learning.practice.spring_forum_with_react.TestUtils;
 import learning.practice.spring_forum_with_react.base.initData.TestData;
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.CommentCreateForm;
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostSaveForm;
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostView;
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.*;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
 import org.hibernate.QueryParameterException;
 import org.junit.jupiter.api.Test;
@@ -82,6 +79,24 @@ class PostServiceTest {
     @Test
     void getPostContentFailTest() {
         assertThatThrownBy(() -> postService.getPostView(0L))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void updatePostSuccessTest() throws IllegalAccessException {
+        PostUpdateForm updateForm = new PostUpdateForm();
+        TestUtils.setFieldValue(updateForm, 1L, "수정된 제목", "수정된 본문");
+
+        postService.modifyPost(updateForm);
+        assertThat(postService.getPostView(1L).getContent()).isEqualTo("수정된 본문");
+    }
+
+    @Test
+    void updatePostFailByNonExistsTest() throws IllegalAccessException {
+        PostUpdateForm updateForm = new PostUpdateForm();
+        TestUtils.setFieldValue(updateForm, 0L, "수정된 제목", "수정된 본문");
+
+        assertThatThrownBy(() -> postService.modifyPost(updateForm))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

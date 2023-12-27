@@ -81,6 +81,20 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public Post modifyPost(PostUpdateForm updateForm) {
+        Optional<Post> post = postRepository.findById(updateForm.getId());
+        if (post.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 게시글 입니다");
+        }
+
+        Post unpackedPost = post.get();
+
+        unpackedPost.setTitle(unpackedPost.getTitle());
+        unpackedPost.setContent(updateForm.getContent());
+
+        return postRepository.save(unpackedPost);
+    }
+
     public void deletePost(long postId) {
         postRepository.deleteById(postId);
         commentService.deleteWithPost(postId);

@@ -5,6 +5,7 @@ import learning.practice.spring_forum_with_react.base.initData.TestData;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.CommentCreateForm;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostSaveForm;
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostView;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
 import org.hibernate.QueryParameterException;
 import org.junit.jupiter.api.Test;
@@ -65,15 +66,22 @@ class PostServiceTest {
     }
 
     @Test
-    void getPostContentSuccessTest() {
-        String content = postService.getPostContent(1L);
+    void getPostContentSuccessTest() throws IllegalAccessException {
+        for(int i = 0; i < 10; i++) {
+            CommentCreateForm commentCreateForm = new CommentCreateForm();
+            TestUtils.setFieldValue(commentCreateForm, 1L, "테스트 댓글", "user1");
 
-        assertThat(content).isEqualTo("content1");
+            commentService.createComment(commentCreateForm);
+        }
+
+        PostView postContent = postService.getPostView(1L);
+        assertThat(postContent.getContent()).isEqualTo("content1");
+        assertThat(postContent.getComments().size()).isEqualTo(10);
     }
 
     @Test
     void getPostContentFailTest() {
-        assertThatThrownBy(() -> postService.getPostContent(0L))
+        assertThatThrownBy(() -> postService.getPostView(0L))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

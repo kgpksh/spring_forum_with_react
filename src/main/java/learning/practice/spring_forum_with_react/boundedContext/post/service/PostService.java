@@ -1,8 +1,6 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostContent;
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostSaveForm;
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.*;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
 import learning.practice.spring_forum_with_react.boundedContext.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -58,13 +56,19 @@ public class PostService {
         return oldestId;
     }
 
-    public String getPostContent(long postId) {
+    public PostView getPostView(long postId) {
         Optional<PostContent> content = postRepository.findContentById(postId);
         if (content.isEmpty()) {
             throw new IllegalArgumentException("존재 하지 않는 게시글입니다");
         }
 
-        return content.get().getContent();
+        List<CommentView> comments = commentService.getCommentInPost(postId);
+
+        PostView postView = new PostView();
+        postView.setContent(content.get().getContent());
+        postView.setComments(comments);
+
+        return postView;
     }
 
     public Post savePost(PostSaveForm postSaveForm) {

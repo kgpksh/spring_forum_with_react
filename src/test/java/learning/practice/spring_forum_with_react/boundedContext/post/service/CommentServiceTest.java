@@ -63,7 +63,7 @@ class CommentServiceTest {
     @Test
     @Order(4)
     void deleteCommentTest() {
-        commentService.deleteComment(1L);
+        commentService.deleteComment(List.of(1L));
 
         List<CommentView> comments = commentService.getCommentInPost(1L);
 

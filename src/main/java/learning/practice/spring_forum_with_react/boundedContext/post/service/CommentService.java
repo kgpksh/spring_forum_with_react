@@ -43,7 +43,7 @@ public class CommentService {
         return commentRepository.save(unpackedComment);
     }
 
-    public void deleteComment(long id) {
-        commentRepository.deleteById(id);
+    public void deleteComment(List<Long> ids) {
+        commentRepository.deleteAllById(ids);
     }
 }

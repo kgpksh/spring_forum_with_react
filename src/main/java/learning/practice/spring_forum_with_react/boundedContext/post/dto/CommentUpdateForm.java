@@ -6,7 +6,11 @@ import lombok.Getter;
 @Getter
 public class CommentUpdateForm {
     @NotNull
+    private long postId;
+    @NotNull
     private long id;
     @NotNull
     private String comment;
+    @NotNull
+    private String author;
 }

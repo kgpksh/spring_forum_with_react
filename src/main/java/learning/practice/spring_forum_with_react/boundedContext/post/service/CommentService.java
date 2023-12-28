@@ -22,16 +22,17 @@ public class CommentService {
         return commentRepository.findAllByPostId(postId);
     }
 
-    public Comment createComment(CommentCreateForm commentInput) {
+    public List<CommentView> createComment(CommentCreateForm commentInput) {
         Comment comment = new Comment();
         comment.setComment(commentInput.getComment());
         comment.setAuthor(commentInput.getAuthor());
         comment.setPostId(commentInput.getPostId());
 
-        return commentRepository.save(comment);
+        commentRepository.save(comment);
+        return getCommentInPost(commentInput.getPostId());
     }
 
-    public Comment updateComment(CommentUpdateForm commentUpdate) {
+    public List<CommentView> updateComment(CommentUpdateForm commentUpdate) {
         Optional<Comment> comment = commentRepository.findById(commentUpdate.getId());
 
         if (comment.isEmpty()) {
@@ -40,7 +41,8 @@ public class CommentService {
 
         Comment unpackedComment = comment.get();
         unpackedComment.setComment(commentUpdate.getComment());
-        return commentRepository.save(unpackedComment);
+        commentRepository.save(unpackedComment);
+        return getCommentInPost(commentUpdate.getPostId());
     }
 
     public void deleteComment(List<Long> ids) {

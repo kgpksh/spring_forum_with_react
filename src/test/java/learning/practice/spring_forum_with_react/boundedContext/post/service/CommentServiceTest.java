@@ -53,7 +53,7 @@ class CommentServiceTest {
     @Order(3)
     void updateCommentTest() throws IllegalAccessException {
         CommentUpdateForm updateForm = new CommentUpdateForm();
-        TestUtils.setFieldValue(updateForm, 1L, "바뀐 댓글1");
+        TestUtils.setFieldValue(updateForm, 1L, 1L, "바뀐 댓글1", "user1");
 
         commentService.updateComment(updateForm);
 

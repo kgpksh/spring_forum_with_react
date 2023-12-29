@@ -1,8 +1,8 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.controller;
 
 import jakarta.validation.Valid;
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostList;
-import learning.practice.spring_forum_with_react.boundedContext.post.dto.PostSaveForm;
+import learning.practice.spring_forum_with_react.boundedContext.post.dto.*;
+import learning.practice.spring_forum_with_react.boundedContext.post.service.CommentService;
 import learning.practice.spring_forum_with_react.boundedContext.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping("/list")
     List<PostList> showPostPage(@RequestParam(required = false) String category, @RequestParam Long oldestId) {
@@ -23,6 +24,23 @@ public class PostController {
             return postService.readPostList(oldestId);
         }
         return postService.readPostList(category, oldestId);
+    }
+
+    @GetMapping("/view")
+    PostView showPost(@RequestParam Long postId) {
+        return postService.getPostView(postId);
+    }
+
+    @PostMapping("/comment")
+    @PreAuthorize("isAuthenticated()")
+    ResponseEntity<List<CommentView>> createComment(@RequestBody @Valid CommentCreateForm commentCreateForm) {
+        return ResponseEntity.ok(commentService.createComment(commentCreateForm));
+    }
+
+    @PutMapping("/comment")
+    @PreAuthorize("isAuthenticated()")
+    ResponseEntity<List<CommentView>> modifyComment(@RequestBody @Valid CommentUpdateForm commentUpdateForm) {
+        return ResponseEntity.ok(commentService.updateComment(commentUpdateForm));
     }
 
     @PostMapping("/post")

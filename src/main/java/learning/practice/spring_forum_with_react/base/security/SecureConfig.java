@@ -36,10 +36,12 @@ public class SecureConfig {
                     request.requestMatchers(
                             new AntPathRequestMatcher("/post/list")
                             ,new AntPathRequestMatcher("/category/categoryList")
+                            , new AntPathRequestMatcher("/post/view")
                     ).permitAll();
 
                     request.requestMatchers(
                             new AntPathRequestMatcher("/post/post")
+                            , new AntPathRequestMatcher(("/post/comment"))
                     ).authenticated();
                 }).
                 sessionManagement((sessionManagement) -> {

@@ -57,16 +57,21 @@ public class PostService {
     }
 
     public PostView getPostView(long postId) {
-        Optional<PostContent> content = postRepository.findContentById(postId);
-        if (content.isEmpty()) {
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isEmpty()) {
             throw new IllegalArgumentException("존재 하지 않는 게시글입니다");
         }
 
         List<CommentView> comments = commentService.getCommentInPost(postId);
+        Post unpackedPost = post.get();
+
+        long nextView = unpackedPost.getView();
+        unpackedPost.setView(++nextView);
 
         PostView postView = new PostView();
-        postView.setContent(content.get().getContent());
+        postView.setContent(unpackedPost.getContent());
         postView.setComments(comments);
+        postView.setView(nextView);
 
         return postView;
     }

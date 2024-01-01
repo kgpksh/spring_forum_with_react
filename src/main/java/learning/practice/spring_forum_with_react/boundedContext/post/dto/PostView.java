@@ -10,4 +10,5 @@ import java.util.List;
 public class PostView {
     private String content;
     private List<CommentView> comments;
+    private long view;
 }

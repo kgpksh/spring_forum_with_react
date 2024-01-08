@@ -32,6 +32,7 @@ public class BulkDataManager {
                 "id BIGINT NOT NULL AUTO_INCREMENT," +
                 "created_date DATETIME," +
                 "last_modified_date DATETIME," +
+                "deleted_date DATETIME," +
                 "title VARCHAR(255) NOT NULL," +
                 "category INT NOT NULL," +
                 "author VARCHAR(255) NOT NULL," +

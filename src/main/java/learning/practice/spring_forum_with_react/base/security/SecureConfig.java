@@ -41,7 +41,7 @@ public class SecureConfig {
 
                     request.requestMatchers(
                             new AntPathRequestMatcher("/post/post")
-                            , new AntPathRequestMatcher(("/post/comment"))
+                            , new AntPathRequestMatcher("/post/comment")
                     ).authenticated();
                 }).
                 sessionManagement((sessionManagement) -> {

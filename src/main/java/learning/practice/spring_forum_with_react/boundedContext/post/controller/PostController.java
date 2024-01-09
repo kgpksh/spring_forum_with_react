@@ -49,4 +49,11 @@ public class PostController {
         postService.savePost(postSaveForm);
         return ResponseEntity.ok("success");
     }
+
+    @DeleteMapping("/post")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity deletePost(@RequestParam long postId) {
+        postService.deletePost(postId);
+        return ResponseEntity.ok("success");
+    }
 }

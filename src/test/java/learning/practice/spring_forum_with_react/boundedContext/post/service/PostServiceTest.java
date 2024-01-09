@@ -2,14 +2,18 @@ package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
 import learning.practice.spring_forum_with_react.TestUtils;
 import learning.practice.spring_forum_with_react.base.initData.TestData;
+import learning.practice.spring_forum_with_react.base.rq.Rq;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.*;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
 import org.hibernate.QueryParameterException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.List;
 
@@ -25,6 +29,8 @@ class PostServiceTest {
     private TestData testData;
     @Autowired
     private CommentService commentService;
+    @MockBean
+    private Rq rq;
 
     @Test
     void readPostListByCategoryTest() {
@@ -83,7 +89,8 @@ class PostServiceTest {
     }
 
     @Test
-    void updatePostSuccessTest() throws IllegalAccessException {
+    void updatePostSuccessTest() throws Exception {
+        when(rq.isOwner(anyString())).thenReturn(true);
         PostUpdateForm updateForm = new PostUpdateForm();
         TestUtils.setFieldValue(updateForm, 1L, "수정된 제목", "수정된 본문");
 
@@ -92,7 +99,7 @@ class PostServiceTest {
     }
 
     @Test
-    void updatePostFailByNonExistsTest() throws IllegalAccessException {
+    void updatePostFailByNonExistsTest() throws Exception {
         PostUpdateForm updateForm = new PostUpdateForm();
         TestUtils.setFieldValue(updateForm, 0L, "수정된 제목", "수정된 본문");
 
@@ -101,7 +108,8 @@ class PostServiceTest {
     }
 
     @Test
-    void deletePost() throws IllegalAccessException {
+    void deletePost() throws Exception {
+        when(rq.isOwner(anyString())).thenReturn(true);
         for(int i = 0; i < 10; i++) {
             CommentCreateForm commentCreateForm = new CommentCreateForm();
             TestUtils.setFieldValue(commentCreateForm, 1L, "테스트 댓글", "user1");

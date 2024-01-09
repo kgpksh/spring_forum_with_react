@@ -1,5 +1,6 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
+import learning.practice.spring_forum_with_react.base.rq.Rq;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.CommentCreateForm;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.CommentUpdateForm;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.CommentView;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @Transactional
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final Rq rq;
 
     public List<CommentView> getCommentInPost(long postId) {
         return commentRepository.findAllByPostId(postId);
@@ -32,21 +34,33 @@ public class CommentService {
         return getCommentInPost(commentInput.getPostId());
     }
 
-    public List<CommentView> updateComment(CommentUpdateForm commentUpdate) {
-        Optional<Comment> comment = commentRepository.findById(commentUpdate.getId());
-
-        if (comment.isEmpty()) {
-            throw new IllegalArgumentException("존재하지 않는 게시글 입니다");
-        }
-
-        Comment unpackedComment = comment.get();
-        unpackedComment.setComment(commentUpdate.getComment());
-        commentRepository.save(unpackedComment);
+    public List<CommentView> updateComment(CommentUpdateForm commentUpdate) throws Exception {
+        Comment comment = validate(commentUpdate.getId());
+        comment.setComment(commentUpdate.getComment());
+        commentRepository.save(comment);
         return getCommentInPost(commentUpdate.getPostId());
     }
 
-    public void deleteComment(List<Long> ids) {
+    public void deleteComment(List<Long> ids) throws Exception{
+        for (long id : ids) {
+            validate(id);
+        }
         commentRepository.deleteAllById(ids);
+    }
+
+    private Comment validate(long id) throws Exception {
+        Optional<Comment> comment = commentRepository.findById(id);
+        if (comment.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 댓글 입니다");
+        }
+
+        Comment unpackedComment = comment.get();
+
+        if (!rq.isOwner(unpackedComment.getAuthor())) {
+            throw new IllegalAccessException("이 댓글의 작성자가 아닙니다.");
+        }
+
+        return unpackedComment;
     }
 
     public void deleteWithPost(long postId) {

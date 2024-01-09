@@ -1,5 +1,6 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
+import learning.practice.spring_forum_with_react.base.rq.Rq;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.*;
 import learning.practice.spring_forum_with_react.boundedContext.post.entity.Post;
 import learning.practice.spring_forum_with_react.boundedContext.post.repository.PostRepository;
@@ -21,6 +22,7 @@ public class PostService {
     private final int SELECT_RANGE = 500;
 
     private final CommentService commentService;
+    private final Rq rq;
 
     public List<PostList> readPostList(String category, long oldestId) throws QueryParameterException {
         try {
@@ -86,21 +88,32 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Post modifyPost(PostUpdateForm updateForm) {
-        Optional<Post> post = postRepository.findById(updateForm.getId());
+    public Post modifyPost(PostUpdateForm updateForm) throws Exception {
+        Post post = validate(updateForm.getId());
+
+        post.setTitle(updateForm.getTitle());
+        post.setContent(updateForm.getContent());
+
+        return postRepository.save(post);
+    }
+
+    private Post validate(long postId) throws Exception {
+        Optional<Post> post = postRepository.findById(postId);
         if (post.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않는 게시글 입니다");
         }
 
         Post unpackedPost = post.get();
 
-        unpackedPost.setTitle(unpackedPost.getTitle());
-        unpackedPost.setContent(updateForm.getContent());
+        if (!rq.isOwner(unpackedPost.getAuthor())) {
+            throw new IllegalAccessException("이 게시글의 작성자가 아닙니다.");
+        }
 
-        return postRepository.save(unpackedPost);
+        return unpackedPost;
     }
 
-    public void deletePost(long postId) {
+    public void deletePost(long postId) throws Exception {
+        Post post = validate(postId);
         postRepository.deleteById(postId);
         commentService.deleteWithPost(postId);
     }

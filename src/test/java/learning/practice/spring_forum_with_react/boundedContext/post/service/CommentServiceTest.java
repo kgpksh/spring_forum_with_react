@@ -1,17 +1,18 @@
 package learning.practice.spring_forum_with_react.boundedContext.post.service;
 
 import learning.practice.spring_forum_with_react.TestUtils;
+import learning.practice.spring_forum_with_react.base.rq.Rq;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.CommentCreateForm;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.CommentUpdateForm;
 import learning.practice.spring_forum_with_react.boundedContext.post.dto.CommentView;
 import learning.practice.spring_forum_with_react.boundedContext.post.repository.CommentRepository;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ class CommentServiceTest {
     private CommentService commentService;
     @Autowired
     private CommentRepository commentRepository;
+    @MockBean
+    private Rq rq;
 
     @Test
     @Order(1)
@@ -51,7 +54,8 @@ class CommentServiceTest {
 
     @Test
     @Order(3)
-    void updateCommentTest() throws IllegalAccessException {
+    void updateCommentTest() throws Exception {
+        when(rq.isOwner(anyString())).thenReturn(true);
         CommentUpdateForm updateForm = new CommentUpdateForm();
         TestUtils.setFieldValue(updateForm, 1L, 1L, "바뀐 댓글1", "user1");
 
@@ -62,7 +66,8 @@ class CommentServiceTest {
 
     @Test
     @Order(4)
-    void deleteCommentTest() {
+    void deleteCommentTest() throws Exception {
+        when(rq.isOwner(anyString())).thenReturn(true);
         commentService.deleteComment(List.of(1L));
 
         List<CommentView> comments = commentService.getCommentInPost(1L);

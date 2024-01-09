@@ -39,7 +39,7 @@ public class PostController {
 
     @PutMapping("/comment")
     @PreAuthorize("isAuthenticated()")
-    ResponseEntity<List<CommentView>> modifyComment(@RequestBody @Valid CommentUpdateForm commentUpdateForm) {
+    ResponseEntity<List<CommentView>> modifyComment(@RequestBody @Valid CommentUpdateForm commentUpdateForm) throws Exception {
         return ResponseEntity.ok(commentService.updateComment(commentUpdateForm));
     }
 
@@ -52,7 +52,7 @@ public class PostController {
 
     @DeleteMapping("/post")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity deletePost(@RequestParam long postId) {
+    public ResponseEntity deletePost(@RequestParam long postId) throws Exception {
         postService.deletePost(postId);
         return ResponseEntity.ok("success");
     }
